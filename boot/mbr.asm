@@ -1,6 +1,8 @@
 org 0x7C00
 bits 16
 
+times 62 db 0
+
 start:
     cli
 
@@ -27,7 +29,7 @@ puts:
     ret
 
 
-confidence db "MBR...", 0x0D, 0X0A, 0
+confidence db "MBR...", 0x0D, 0x0A, 0
 
 times 510-($-$$) db 0
 dw 0xAA55
