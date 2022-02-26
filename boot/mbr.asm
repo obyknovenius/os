@@ -3,6 +3,13 @@ bits 16
 
 DIROFF  equ 0x0200 ; where to read the root directory (offset)
 
+; FAT directory entry
+DNAME   equ 0x00
+DEXT    equ 0x08
+DATTR   equ 0x0B
+
+DIRSZ   equ 0x20
+
 ; We keep data on the stack, indexed by BP.
 DRIVE   equ 0x00    ; boot drive, passed by BIOS in DL
 TOTAL   equ 0x02    ; size of allocated data above
@@ -76,7 +83,29 @@ start:
     call dreset
 
     mov bx, magic+DIROFF
-    call read           ; read the root directory
+    call read               ; read the root directory
+
+    mov bx, 512/DIRSZ
+
+    mov di, magic+DIROFF    ; compare first directory entry
+
+.findboot                   ; save for later if it matches
+    push di
+    mov si, bootfile
+    mov cx, DATTR
+    repe cmpsb
+    pop di
+    je .printboot
+
+    dec bx
+    jz perror
+
+    add di, DIRSZ
+    jmp .findboot
+
+.printboot
+    mov si, di
+    call puts
 
     hlt
 
@@ -158,6 +187,7 @@ perror:
 
 confidence: db "MBR...", 0x0D, 0x0A, 0
 error: db "Error", 0x0D, 0x0A, 0
+bootfile: db "BOOT    TXT"
 
 times 510-($-$$) db 0
 dw 0xAA55
