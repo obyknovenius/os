@@ -85,10 +85,10 @@ start:
 	mul byte [nfats]
 	add ax, [nresrv]
 
-	call dreset
+	call diskreset
 
 	mov bx, magic+DIROFF
-	call read		; read the root directory
+	call readsect		; read the root directory
 
 	mov bx, 512/DIRSZ
 
@@ -152,15 +152,18 @@ start:
 	pop dx
 	pop ax
 
-	mov bx, LOADSEG
-	mov es, bx
-	mov bx, LOADOFF
+	mov bx, LOADSEG		; address to load into (seg+offset)
+	mov es, bx		; seg
+	mov bx, LOADOFF		; offset
 
-	call read
-	hlt
+	call readsect
+
+	mov di, LOADSEG		; set DS for loaded code
+	mov ds, di
+	jmp LOADSEG:LOADOFF	; no deposit, no return
 
 ; Reset disk system
-dreset:
+diskreset:
 	pusha
 
 	xor ax, ax		; AH = 0x00
@@ -174,14 +177,14 @@ dreset:
 ; Read a sector from a disk.
 ;   DX:AX   sector number
 ;   ES:BX   buffer address
-read:
+readsect:
 	pusha
 	push bx
 
 	mov bx, [trksize]
 	imul bx, [nheads]
 	or bx, bx
-	jz perror
+	jz pioerror
 	div bx			; AX = cylinder, DX = sector
 
 	mov cx, ax		; save cylinder
@@ -206,7 +209,7 @@ read:
 	
 	pop bx
 	int 0x13
-	jc perror		; CF set on error
+	jc pioerror		; CF set on error
 
 	popa
 	ret
@@ -235,9 +238,19 @@ perror:
 	call puts
 	hlt
 
-confidence: db "MBR...", 0x0D, 0x0A, 0
-error: db "Error", 0x0D, 0x0A, 0
-bootfile: db "BOOT    TXT"
+pioerror:
+	mov si, ioerror
+	call puts
+	hlt
 
-times 510-($-$$) db 0
-dw 0xAA55
+confidence:
+	db "MBR...", 0x0D, 0x0A, 0
+error:
+	db "Error", 0x0D, 0x0A, 0
+ioerror:
+	db "I/O error", 0x0D, 0x0A, 0
+bootfile:
+	db "KERNEL     "
+
+	times 510-($-$$) db 0
+	dw 0xAA55
