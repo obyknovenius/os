@@ -1,5 +1,5 @@
-org 0x10000
 bits 16
+extern start32p
 
 ; fields in segment descriptors
 %define SEGG	(1<<23)			; granularity 1=4k
@@ -37,19 +37,18 @@ start16r:
 	mov ax, 0x2401			; enable a20 line
 	int 0x15
 
+	mov esi, hello			; output a cheery wee message
+	call puts
+
 ; Load a basic GDT to map 4GB, turn on the protection mode bit in CR0,
 ; set all the segments to point to the new GDT then jump to the 32-bit code.
-	lgdt [gdtdesc]			; load a basic GDT
+	lgdt [dword gdtdesc-0x10000]	; load a basic GDT
 
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax			; turn on protection mode
 
-	jmp dword 0x08:start32p
-
-	mov si, hello
-	call puts
-	hlt
+	jmp dword SELECTOR(1):start32p
 
 ; Output a string to the display.
 ;   SI  string
@@ -81,12 +80,3 @@ gdt:
 gdtdesc:
 	dw gdtdesc-gdt
 	dd gdt
-
-[bits 32]
-start32p:
-	mov ax, 0x10
-	mov ds, eax
-	mov ss, ax
-	mov byte [0xB8000], 'P'
-	mov byte [0xB8001], 0x1B
-	hlt
