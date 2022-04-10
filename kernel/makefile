@@ -1,13 +1,25 @@
-all: kernel
+CC=i686-elf-gcc
+LD=i686-elf-ld
+AS=nasm
 
-kernel: kernel.ld l16r.o l32p.o
-	i686-elf-ld -T kernel.ld l16r.o l32p.o --oformat binary -o kernel
+OBJ=\
+	l16r.o\
+	l32p.o\
+	main.o\
 
-l16r.o: l16r.asm
-	nasm -f elf $<
+TARG=\
+	kernel
 
-l32p.o: l32p.asm
-	nasm -f elf $<
+all: $(TARG)
+
+kernel: kernel.ld $(OBJ)
+	$(LD) -T kernel.ld $(OBJ) --oformat binary -o kernel
+
+%.o: %.asm
+	$(AS) -f elf $<
+
+%.o: %.c
+	$(CC) -c $< -o $@
 
 clean:
-	rm -f l16r.o l32p.o kernel
+	rm -f $(OBJ) kernel

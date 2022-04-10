@@ -1,7 +1,12 @@
-all: vbr
+AS=nasm
 
-vbr: vbr.asm
-	nasm -f bin $<
+TARG=\
+	vbr
+
+all: $(TARG)
+
+%: %.asm
+	$(AS) -f bin $<
 
 clean:
 	rm -f vbr
