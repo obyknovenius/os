@@ -148,6 +148,11 @@ start:
 	mov ax, [di+DLENLO]
 	mov dx, [di+DLENHI]
 	mov cx, [sectsize]
+	push cx
+	dec cx
+	add ax, cx
+	adc dx, bx
+	pop cx
 	div cx
 	mov cx, ax
 	pop dx
@@ -157,7 +162,22 @@ start:
 	mov es, bx			; seg
 	mov bx, LOADOFF			; offset
 
-	call readsect
+.readboot:
+	call readsect			; read the sector
+
+	mov di, [sectsize]		; bump addresses/counts
+	add bx, di
+	jnb .incsectno
+
+	mov di, es			; next 64KB segment
+	add di, 0x1000
+	mov es, di
+
+.incsectno:
+	xor di, di
+	inc ax
+	adc dx, di
+	loop .readboot
 
 	mov di, LOADSEG			; set DS for loaded code
 	mov ds, di
