@@ -1,7 +1,10 @@
-static char* buf = 0xB8000;
+void cgainit();
+void cgaputc(int c);
+void cgaputs(char* s);
 
 void
 main() {
-	buf[2] = 'C';
-	buf[3] = 0x1B;
+	cgainit();
+	cgaputs("Enjoy Your Journey");
+	cgaputc('\n');
 }

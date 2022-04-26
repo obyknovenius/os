@@ -5,6 +5,7 @@ AS=nasm
 OBJ=\
 	l16r.o\
 	l32p.o\
+	cga.o\
 	main.o\
 
 TARG=\
