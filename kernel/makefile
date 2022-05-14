@@ -6,6 +6,7 @@ OBJ=\
 	l16r.o\
 	l32p.o\
 	cga.o\
+	print.o\
 	main.o\
 
 TARG=\

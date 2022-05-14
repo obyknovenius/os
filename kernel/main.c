@@ -1,10 +1,12 @@
-void cgainit();
-void cgaputc(int c);
-void cgaputs(char* s);
+#include "cga.h"
+#include "print.h"
 
 void
 main() {
 	cgainit();
-	cgaputs("Enjoy Your Journey");
-	cgaputc('\n');
+
+	print("Enjoy Your Journey\n");
+
+	print("decimal: %d\n", 123);
+	print("hex: %x\n", 0x1a2);
 }
