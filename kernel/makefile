@@ -25,3 +25,5 @@ kernel: kernel.ld $(OBJ)
 
 clean:
 	rm -f $(OBJ) kernel
+
+.PHONY: all clean

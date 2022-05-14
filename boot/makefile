@@ -10,3 +10,5 @@ all: $(TARG)
 
 clean:
 	rm -f vbr
+
+.PHONY: all clean
