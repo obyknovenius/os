@@ -1,3 +1,4 @@
+#include "t.h"
 #include "stdarg.h"
 #include "cga.h"
 
@@ -12,9 +13,10 @@ struct Fmt {
 };
 
 /* fmt an integer */
-void ifmt(Fmt *f) {
+static void
+ifmt(Fmt *f) {
 	char buf[MaxIntWidth], *p, *conv;
-	unsigned long u;
+	uint64 u;
 	int base, i, n, rem;
 
 	u = va_arg(f->args, int);
@@ -55,7 +57,7 @@ void ifmt(Fmt *f) {
 	}
 }
 
-char*
+static char*
 fmtdispatch(Fmt *f, char *fmt) {
 	char c;
 
@@ -73,7 +75,7 @@ fmtdispatch(Fmt *f, char *fmt) {
 	}
 }
 
-void
+static void
 dofmt(Fmt *f, char *fmt) {
 	char c;
 
@@ -89,7 +91,7 @@ dofmt(Fmt *f, char *fmt) {
 	}
 }
 
-void
+static void
 vfprint(char *fmt, va_list args) {
 	Fmt f;
 

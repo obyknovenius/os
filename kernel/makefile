@@ -7,7 +7,10 @@ OBJ=\
 	l32p.o\
 	cga.o\
 	print.o\
-	main.o\
+	main.o
+
+LIBCC=\
+	${shell $(CC) --print-libgcc-file-name}
 
 TARG=\
 	kernel
@@ -15,7 +18,7 @@ TARG=\
 all: $(TARG)
 
 kernel: kernel.ld $(OBJ)
-	$(LD) -T kernel.ld $(OBJ) --oformat binary -o kernel
+	$(LD) -T kernel.ld $(OBJ) $(LIBCC) -o kernel
 
 %.o: %.asm
 	$(AS) -f elf $<

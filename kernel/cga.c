@@ -1,4 +1,7 @@
-#define DISPLAYBUF ((unsigned char*)0xB8000)
+#include "t.h"
+#include "cga.h"
+
+#define DISPLAYBUF ((byte*)0xB8000)
 
 enum {
 	Black,
@@ -20,17 +23,17 @@ enum {
 
 static int curpos;
 
-unsigned char inb(int port);
-void outb(int port, unsigned char b);
+byte inb(int port);
+void outb(int port, byte b);
 
-static unsigned char
+static byte
 crtcregr(int index) {
 	outb(0x3D4, index);
 	return inb(0x3D5) & 0xFF;
 }
 
 static void
-crtcregw(int index, unsigned char data) {
+crtcregw(int index, byte data) {
 	outb(0x3D4, index);
 	outb(0x3D5, data);
 }
