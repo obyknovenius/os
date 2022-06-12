@@ -1,5 +1,6 @@
 #include "cga.h"
 #include "print.h"
+#include "trap.h"
 
 void
 main() {
@@ -7,6 +8,6 @@ main() {
 
 	print("Enjoy Your Journey\n");
 
-	print("decimal: %d\n", 123);
-	print("hex: %x\n", 0x1a2);
+	trapinit();
+	asm("int $0");
 }

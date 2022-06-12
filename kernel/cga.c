@@ -48,11 +48,11 @@ void
 cgaputc(int c) {
 	int i;
 
-	if(c == '\n') {
+	if (c == '\n') {
 		curpos = curpos / Width;
 		curpos = (curpos + 1) * Width;
 	}
-	else if(c == '\t') {
+	else if (c == '\t') {
 		i = 8 - ((curpos / 2) % 8);
 		while (i-- > 0)
 			cgaputc(' ');
@@ -66,7 +66,7 @@ cgaputc(int c) {
 
 void
 cgaputs(char *s) {
-	while(*s != '\0')
+	while (*s != '\0')
 		cgaputc(*s++);
 }
 

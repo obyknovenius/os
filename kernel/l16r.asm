@@ -1,6 +1,11 @@
 bits 16
 extern start32p
 
+; known x86 segments (in GDT) and their selectors
+%define NULLSEG	0			; null segment
+%define KCSEG	1			; kernel code
+%define KDSEG	2			; kernel data/stack
+
 ; fields in segment descriptors
 %define SEGG	(1<<23)			; granularity 1=4k
 %define	SEGB	(1<<22)			; big 1=32bit (for stack)
@@ -15,8 +20,8 @@ extern start32p
 %define SEGC	(1<<10)			; conforming (for code)
 %define SEGR	(1<<9)			; readable (for code)
 
-%define SEGDATA (SEGS)
-%define SEGCODE (SEGS|1<<11)
+%define SEGDATA (SEGS)			; data/stack segment
+%define SEGCODE (SEGS|1<<11)		; code segment
 
 %define SELECTOR(i)	((i)<<3)
 

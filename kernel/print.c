@@ -22,7 +22,7 @@ ifmt(Fmt *f) {
 	u = va_arg(f->args, int);
 
 	conv = "0123456789abcdef";
-	switch(f->c) {
+	switch (f->c) {
 	case 'd':
 		base = 10;
 		break;
@@ -33,26 +33,26 @@ ifmt(Fmt *f) {
 
 	p = buf + sizeof(buf) - 1;
 	n = 0;
-	while(u) {
+	while (u) {
 		i = u % base;
 		u /= base;
 		*p-- = conv[i];
 		n++;
 	}
 
-	if(n == 0) {
+	if (n == 0) {
 		*p-- = '0';
 		n = 1;
 	}
 
-	if(base == 16) {
+	if (base == 16) {
 		n += 2;
 		*p-- = f->c;
 		*p-- = '0';
 	}
 	
 	p = p + 1;
-	for(;n > 0; n--) {
+	for (;n > 0; n--) {
 		cgaputc(*p++);
 	}
 }
@@ -61,12 +61,12 @@ static char*
 fmtdispatch(Fmt *f, char *fmt) {
 	char c;
 
-	for(;;) {
+	for (;;) {
 		c = *fmt;
 		fmt = fmt + 1;
 		
 		f->c = c;
-		switch(c) {
+		switch (c) {
 		case 'd':
 		case 'x':
 			ifmt(f);
@@ -79,13 +79,13 @@ static void
 dofmt(Fmt *f, char *fmt) {
 	char c;
 
-	for(;;) {
-		while((c = *fmt) && c != '%') {
+	for (;;) {
+		while ((c = *fmt) && c != '%') {
 			cgaputc(c);
 			fmt++;
 		}
 		fmt++;
-		if(!c)
+		if (!c)
 			return;
 		fmt = fmtdispatch(f, fmt);
 	}

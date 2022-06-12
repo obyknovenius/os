@@ -5,8 +5,10 @@ AS=nasm
 OBJ=\
 	l16r.o\
 	l32p.o\
+	l.o\
 	cga.o\
 	print.o\
+	trap.o\
 	main.o
 
 LIBCC=\
