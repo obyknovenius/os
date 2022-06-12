@@ -31,7 +31,7 @@ void loadidt(uint16* ptr);
 	for (v = 0; v < 256; v++) {
 		idt[v].d0 = (vaddr & 0xFFFF) | (KCSEL << 16);
 		idt[v].d1 = (vaddr & 0xFFFF0000) | SEGP | SEGPL(0) | SEGIG;
-		//vaddr += 6;
+		vaddr += 6;
 	}
 
 	ptr[0] = sizeof(Segdesc) * 255 - 1;
@@ -39,4 +39,10 @@ void loadidt(uint16* ptr);
 	ptr[1] = x & 0xFFFF;
 	ptr[2] = (x >> 16) & 0xFFFF;
 	loadidt(ptr);
+ }
+
+ void
+ trap(int intr) {
+	print("error: %x", intr);
+	asm("hlt");
  }

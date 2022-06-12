@@ -9,5 +9,5 @@ main() {
 	print("Enjoy Your Journey\n");
 
 	trapinit();
-	asm("int $0");
+	asm("int $0x08");
 }
