@@ -10,7 +10,7 @@ struct Segdesc {
 };
 
 void vectortable();
-void loadidt(uint16* ptr);
+void lidt(uint16* ptr);
 
 /*
  * Minimal trap setup. Just enough so that we can panic
@@ -38,7 +38,7 @@ void loadidt(uint16* ptr);
 	x = IDTADDR;
 	ptr[1] = x & 0xFFFF;
 	ptr[2] = (x >> 16) & 0xFFFF;
-	loadidt(ptr);
+	lidt(ptr);
  }
 
  void

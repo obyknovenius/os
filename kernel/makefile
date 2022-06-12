@@ -5,6 +5,7 @@ AS=nasm
 OBJ=\
 	l16r.o\
 	l32p.o\
+	l32v.o\
 	l.o\
 	cga.o\
 	print.o\

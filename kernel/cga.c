@@ -23,8 +23,8 @@ enum {
 
 static int curpos;
 
-byte inb(int port);
-void outb(int port, byte b);
+int inb(int port);
+void outb(int port, int b);
 
 static byte
 crtcregr(int index) {
