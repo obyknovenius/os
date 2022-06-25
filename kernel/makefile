@@ -27,7 +27,7 @@ kernel: kernel.ld $(OBJ)
 	$(AS) -f elf $<
 
 %.o: %.S
-	i686-elf-as $< -o $@
+	i686-elf-gcc -c $< -o $@
 
 %.o: %.c
 	$(CC) -c $< -o $@

@@ -14,6 +14,7 @@
 #define	SELECTOR(i)	((i) << 3)
 
 #define KCSEL	SELECTOR(KCSEG)
+#define KDSEL	SELECTOR(KDSEG)
 
 /*
  * fields in segment descriptors
