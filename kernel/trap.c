@@ -1,5 +1,6 @@
 #include "t.h"
 #include "mem.h"
+#include "ureg.h"
 #include "print.h"
 
 typedef struct Segdesc	Segdesc;
@@ -41,8 +42,13 @@ void lidt(uint16* ptr);
 	lidt(ptr);
  }
 
+/*
+ * All traps come here. It is slower to have all traps call trap()
+ * rather than directly vectoring the handler. However, this avoids a lot
+ * of code duplication and possible bugs.
+ * Trap is called with interrupts disabled via interrupt-gates.
+ */
  void
- trap(int intr) {
-	print("error: %x", intr);
-	asm("hlt");
+ trap(Ureg* ureg) {
+	print("interrupt %d\n", ureg->trap);
  }
