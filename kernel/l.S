@@ -1,5 +1,11 @@
 .extern trap
 
+.globl sti
+
+sti:
+	sti
+	ret
+
 /*
  * Interrupt/exception handling.
  * Each entry in the vector table calls either strayintr or strayintrx

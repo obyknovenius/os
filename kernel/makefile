@@ -10,6 +10,7 @@ OBJ=\
 	cga.o\
 	print.o\
 	trap.o\
+	i8259.o\
 	main.o
 
 LIBCC=\

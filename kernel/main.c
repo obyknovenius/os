@@ -1,6 +1,9 @@
 #include "cga.h"
 #include "print.h"
 #include "trap.h"
+#include "i8259.h"
+
+void sti();
 
 void
 main() {
@@ -10,6 +13,12 @@ main() {
 
 	trapinit();
 
-	asm("int $0x00");
-	print("after interrupt\n");
+	i8259init();
+
+	print("Press any key\n");
+
+	sti();
+
+	for(;;)
+		;
 }

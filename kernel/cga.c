@@ -1,4 +1,5 @@
 #include "t.h"
+#include "io.h"
 #include "cga.h"
 
 #define DISPLAYBUF ((byte*)0xB8000)
@@ -22,9 +23,6 @@ enum {
 };
 
 static int curpos;
-
-int inb(int port);
-void outb(int port, int b);
 
 static byte
 crtcregr(int index) {
