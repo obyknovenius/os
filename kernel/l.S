@@ -1,7 +1,4 @@
-.extern trap
-
-.globl sti
-
+	.globl sti
 sti:
 	sti
 	ret
@@ -15,7 +12,8 @@ sti:
  * from the vector table entry and placing it on the stack as part
  * of the Ureg structure.
  * The size of each entry in the vector table (6 bytes) is known in trapinit().
- */ 
+ */
+	.extern trap
 strayintr:
 	pushl %eax		/* save EAX */
 	movl 4(%esp), %eax	/* return EIP from vectortable */
@@ -45,9 +43,9 @@ intrcommon:
 	popl %es
 	popl %gs
 	addl $8, %esp		/* pop error code and trap type */
-	iretl
+	iret
 
-.globl vectortable
+	.globl vectortable
 vectortable:
 	call strayintr; .byte 0		/* divide error */
 	call strayintr; .byte 1		/* debug */
