@@ -1,6 +1,8 @@
 #include "t.h"
 #include "mem.h"
 #include "ureg.h"
+#include "io.h"
+#include "i8259.h"
 #include "print.h"
 
 typedef struct Segdesc	Segdesc;
@@ -50,5 +52,14 @@ void lidt(uint16* ptr);
  */
  void
  trap(Ureg* ureg) {
-	print("interrupt %d\n", ureg->trap);
+	int vno;
+
+	vno = ureg->trap;
+
+	print("interrupt %d\n", vno);
+
+	if (vno >= VectorPic) {
+		/* reset IS bit */
+		i8259eoi(vno);
+	}
  }
