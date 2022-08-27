@@ -56,9 +56,12 @@ void lidt(uint16* ptr);
 
 	vno = ureg->trap;
 
-	print("interrupt %d\n", vno);
-
 	if (vno >= VectorPic) {
+		if (vno == VectorPic + IrqKbd) {
+			i8042intr();
+		} else {
+			print("interrupt %d\n", vno);
+		}
 		/* reset IS bit */
 		i8259eoi(vno);
 	}

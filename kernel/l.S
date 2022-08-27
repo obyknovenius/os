@@ -7,7 +7,7 @@ sti:
  * Interrupt/exception handling.
  * Each entry in the vector table calls either strayintr or strayintrx
  * depending on whether an error code has been automatically pushed 
- * onto the stack (strayintrx) or not(strayintr), in which case 
+ * onto the stack (strayintrx) or not (strayintr), in which case 
  * a dummy zero entry must be pushed before retrieving the trap type
  * from the vector table entry and placing it on the stack as part
  * of the Ureg structure.
