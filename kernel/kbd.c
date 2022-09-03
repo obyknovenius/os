@@ -29,7 +29,7 @@ delay(int ms) {
 }
 
 /*
- * wait for output no longer busy
+ * Wait for output no longer busy
  */
 static int
 outready() {
@@ -60,17 +60,82 @@ inready() {
 	return -1;
 }
 
+enum {
+	Spec	= 0xF800,	/* unicode private use area */
+	Shift	= Spec | 0x60,
+
+	No	= 0x00,
+
+	NScan	= 128,
+};
+
+int kbtab[NScan] =
+{
+	No,	No,	'1',	'2',	'3',	'4',	'5',	'6',
+	'7',	'8',	'9',	'0',	'-',	'=',	'\b',	'\t',
+	'q',	'w',	'e',	'r',	't',	'y',	'u',	'i',
+	'o',	'p',	'[',	']',	'\n',	No,	'a',	's',
+	'd',	'f',	'g',	'h',	'j',	'k',	'l',	';',
+	'\'',	'`',	Shift,	'\\',	'z',	'x',	'c',	'v',
+	'b',	'n',	'm',	',',	'.',	'/',	Shift,	No,
+};
+
+int kbtabshift[NScan] =
+{
+	No,	No,	'!',	'@',	'#',	'$',	'%',	'^',
+	'&',	'*',	'(',	')',	'_',	'+',	'\b',	'\t',
+	'Q',	'W',	'E',	'R',	'T',	'Y',	'U',	'I',
+	'O',	'P',	'{',	'}',	'\n',	No,	'A',	'S',
+	'D',	'F',	'G',	'H',	'J',	'K',	'L',	':',
+	'"',	'~',	Shift,	'|',	'Z',	'X',	'C',	'V',
+	'B',	'N',	'M',	'<',	'>',	'?',	Shift,	No,
+};
+
+static bool shift;
+
 /*
- * keyboard interrupt
+ * Scan code processing
+ */
+static void
+kbdputsc(int c) {
+	int keyup;
+
+	keyup = c & 0x80;
+	c &= 0x7F;
+
+	if (shift)
+		c = kbtabshift[c];
+	else
+		c = kbtab[c];
+
+	/* keyup only important for shifts */
+	if (keyup) {
+		if (c == Shift)
+			shift = false;
+		return;
+	}
+
+	/* special character */
+	if (c & Spec) {
+		if (c == Shift)
+			shift = true;
+		return;
+	}
+	else
+		print("%c", c);
+}
+
+/*
+ * Keyboard interrupt
  */
 void
 i8042intr() {
-	int sc;
+	int c;
 
-	/* get the scan code */
-	sc = inb(Data);
+	/* get the character */
+	c = inb(Data);
 
-	print("scan code: %x\n", sc);
+	kbdputsc(c);
 }
 
 static char *initfailed = "i8042: kbdinit failed\n";
@@ -92,7 +157,8 @@ kbdinit() {
 	if (inready() < 0) {
 		print("i8042: kbdinit can't read ccb\n");
 		ccb = 0;
-	} else
+	}
+	else
 		ccb = inb(Data);
 	
 	if (outready() < 0) {

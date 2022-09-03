@@ -12,6 +12,15 @@ struct Fmt {
 	int c;		/* % format char */
 };
 
+/* fmt a character */
+static void
+cfmt(Fmt *f) {
+	char c;
+
+	c = va_arg(f->args, char);
+	cgaputc(c);
+}
+
 /* fmt an integer */
 static void
 ifmt(Fmt *f) {
@@ -67,6 +76,9 @@ fmtdispatch(Fmt *f, char *fmt) {
 		
 		f->c = c;
 		switch (c) {
+		case 'c':
+			cfmt(f);
+			return fmt;
 		case 'd':
 		case 'x':
 			ifmt(f);

@@ -16,7 +16,7 @@ main() {
 	kbdinit();
 	i8259init();
 
-	print("Press any key\n");
+	print("Type someting\n");
 
 	sti();
 

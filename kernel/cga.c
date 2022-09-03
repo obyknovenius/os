@@ -55,6 +55,12 @@ cgaputc(int c) {
 		while (i-- > 0)
 			cgaputc(' ');
 	}
+	else if (c == '\b') {
+		if (curpos >= 2)
+			curpos -= 2;
+		cgaputc(' ');
+		curpos -= 2;
+	}
 	else {
 		DISPLAYBUF[curpos++] = c;
 		DISPLAYBUF[curpos++] = Attr;
