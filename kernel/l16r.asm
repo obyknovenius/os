@@ -1,6 +1,8 @@
 bits 16
 extern start32p
 
+%define MMAP	512*1024
+
 ; known x86 segments (in GDT) and their selectors
 %define NULLSEG	0			; null segment
 %define KCSEG	1			; kernel code
@@ -44,6 +46,52 @@ start16r:
 
 	mov esi, hello			; output a cheery wee message
 	call puts
+
+; Try to retrieve the 0xE820 memory map.
+e820:
+	mov eax, MMAP
+	shr eax, 4
+	mov es, ax
+	
+	xor di, di
+
+	xor bx, bx
+
+	xor ax, ax
+	stosw
+	stosw
+
+.loop:
+	mov ecx, 20			; buffer size
+	mov edx, 0x534D4150		; signature - ASCII "SMAP"
+	mov eax, 0x0000E820		; function code
+
+	int 0x15			; writes 20 bytes at ES:DI
+
+	jc .end				; some kind of error
+	mov edx, 0x534D4150
+	cmp eax, edx			; verify correct BIOS version
+	jne .end
+	mov dx, 20
+	cmp cx, dx			; verify correct count
+	jne .end
+
+	sub di, 4
+	mov ax, cx
+	stosw
+	mov ax, 0
+	stosw
+
+	add di, 20			; bump to next entry
+
+	xor ax, ax
+	stosw
+	stosw
+
+	cmp bx, 0			; zero if last entry
+	jne .loop
+
+.end
 
 ; Load a basic GDT to map 4GB, turn on the protection mode bit in CR0,
 ; set all the segments to point to the new GDT then jump to the 32-bit code.

@@ -9,6 +9,7 @@ OBJ=\
 	l.o\
 	cga.o\
 	print.o\
+	mmap.o\
 	trap.o\
 	i8259.o\
 	kbd.o\

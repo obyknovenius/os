@@ -6,10 +6,16 @@ enum {
 	MaxIntWidth = 64
 };
 
+enum {
+	FmtLong		= 1,
+	FmtLongLong	= FmtLong << 1
+};
+
 typedef struct Fmt	Fmt;
 struct Fmt {
 	va_list	args;	/* args passed to dofmt */
 	int c;		/* % format char */
+	uint8 flags;
 };
 
 /* fmt a character */
@@ -25,10 +31,21 @@ cfmt(Fmt *f) {
 static void
 ifmt(Fmt *f) {
 	char buf[MaxIntWidth], *p, *conv;
-	uint64 u;
-	int base, i, n, rem;
+	unsigned long long arg;
+	int base, rem, n;
+	uint8 fl;
 
-	u = va_arg(f->args, int);
+	fl = f->flags;
+
+	if (fl & FmtLongLong) {
+		arg = va_arg(f->args, long long);
+	}
+	else if (fl & FmtLong) {
+		arg = va_arg(f->args, long);
+	}
+	else {
+		arg = va_arg(f->args, int);
+	}
 
 	conv = "0123456789abcdef";
 	switch (f->c) {
@@ -42,10 +59,10 @@ ifmt(Fmt *f) {
 
 	p = buf + sizeof(buf) - 1;
 	n = 0;
-	while (u) {
-		i = u % base;
-		u /= base;
-		*p-- = conv[i];
+	while (arg) {
+		rem = arg % base;
+		arg /= base;
+		*p-- = conv[rem];
 		n++;
 	}
 
@@ -66,9 +83,23 @@ ifmt(Fmt *f) {
 	}
 }
 
+static void 
+flagfmt(Fmt* f) {
+	switch (f->c) {
+	case 'l':
+		if (f->flags & FmtLong) {
+			f->flags |= FmtLongLong;
+		}
+		f->flags |= FmtLong;
+		break;
+	}
+}
+
 static char*
 fmtdispatch(Fmt *f, char *fmt) {
 	char c;
+
+	f->flags = 0;
 
 	for (;;) {
 		c = *fmt;
@@ -79,6 +110,9 @@ fmtdispatch(Fmt *f, char *fmt) {
 		case 'c':
 			cfmt(f);
 			return fmt;
+		case 'l':
+			flagfmt(f);
+			break;
 		case 'd':
 		case 'x':
 			ifmt(f);
@@ -104,7 +138,7 @@ dofmt(Fmt *f, char *fmt) {
 }
 
 static void
-vfprint(char *fmt, va_list args) {
+vprint(char *fmt, va_list args) {
 	Fmt f;
 
 	f.args = args;
@@ -116,6 +150,6 @@ print(char *fmt, ...) {
 	va_list args;
 
 	va_start(args, fmt);
-	vfprint(fmt, args);
+	vprint(fmt, args);
 	va_end(args);
 }

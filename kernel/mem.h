@@ -4,6 +4,8 @@
 #define KZERO	0x10000			/* base of kernel address space */
 #define IDTADDR	(KZERO + 0x3000)	/* idt */
 
+#define MMAP	(512*1024)
+
 /*
  * known x86 segments (in GDT) and their selectors
  */

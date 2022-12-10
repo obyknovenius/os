@@ -1,5 +1,6 @@
 #include "cga.h"
 #include "print.h"
+#include "mmap.h"
 #include "trap.h"
 #include "i8259.h"
 #include "kbd.h"
@@ -11,6 +12,8 @@ main() {
 	cgainit();
 
 	print("Enjoy Your Journey\n");
+
+	readmmap();
 
 	trapinit();
 	kbdinit();
