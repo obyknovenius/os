@@ -61,7 +61,7 @@ inready() {
 }
 
 enum {
-	Spec	= 0xF800,	/* unicode private use area */
+	Spec	= 0xf800,	/* unicode private use area */
 	Shift	= Spec | 0x60,
 
 	No	= 0x00,
@@ -101,7 +101,7 @@ kbdputsc(int c) {
 	int keyup;
 
 	keyup = c & 0x80;
-	c &= 0x7F;
+	c &= 0x7f;
 
 	if (shift)
 		c = kbtabshift[c];

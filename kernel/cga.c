@@ -26,20 +26,20 @@ static int curpos;
 
 static byte
 crtcregr(int index) {
-	outb(0x3D4, index);
-	return inb(0x3D5) & 0xFF;
+	outb(0x3d4, index);
+	return inb(0x3d5) & 0xff;
 }
 
 static void
 crtcregw(int index, byte data) {
-	outb(0x3D4, index);
-	outb(0x3D5, data);
+	outb(0x3d4, index);
+	outb(0x3d5, data);
 }
 
 static void
 movecursor() {
-	crtcregw(0x0E, (curpos / 2 >> 8) & 0xFF);
-	crtcregw(0x0F, (curpos / 2) & 0xFF);
+	crtcregw(0x0e, (curpos / 2 >> 8) & 0xff);
+	crtcregw(0x0f, (curpos / 2) & 0xff);
 }
 
 void
@@ -76,7 +76,7 @@ cgaputs(char *s) {
 
 void
 cgainit() {
-	curpos = crtcregr(0x0E) << 8;
-	curpos |= crtcregr(0x0F);
+	curpos = crtcregr(0x0e) << 8;
+	curpos |= crtcregr(0x0f);
 	curpos *= 2;
 }

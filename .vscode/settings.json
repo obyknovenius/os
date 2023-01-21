@@ -2,5 +2,7 @@
 	"editor.renderWhitespace": "all",
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
-	"editor.tabSize": 8
+	"editor.tabSize": 8,
+	"editor.rulers": [80],
+	"files.insertFinalNewline": true
 }

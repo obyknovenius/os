@@ -32,15 +32,15 @@ void lidt(uint16* ptr);
 	idt = (Segdesc*)IDTADDR;
 	vaddr = (uint32)vectortable;
 	for (v = 0; v < 256; v++) {
-		idt[v].d0 = (vaddr & 0xFFFF) | (KCSEL << 16);
-		idt[v].d1 = (vaddr & 0xFFFF0000) | SEGP | SEGPL(0) | SEGIG;
+		idt[v].d0 = (vaddr & 0xffff) | (KCSEL << 16);
+		idt[v].d1 = (vaddr & 0xffff0000) | SEGP | SEGPL(0) | SEGIG;
 		vaddr += 6;
 	}
 
 	ptr[0] = sizeof(Segdesc) * 255 - 1;
 	x = IDTADDR;
-	ptr[1] = x & 0xFFFF;
-	ptr[2] = (x >> 16) & 0xFFFF;
+	ptr[1] = x & 0xffff;
+	ptr[2] = (x >> 16) & 0xffff;
 	lidt(ptr);
  }
 

@@ -3,6 +3,7 @@
  */
 #define KZERO	0x10000			/* base of kernel address space */
 #define IDTADDR	(KZERO + 0x3000)	/* idt */
+#define PXEBASE	0x7c00			/* pxe loads us here */
 
 #define MMAP	(512*1024)
 
@@ -37,6 +38,6 @@
 #define SEGDATA (SEGS)			/* data/stack segment */
 #define SEGCODE (SEGS | 1 << 11)	/* code segment */
 
-#define	SEGCG	(0x0C << 8)		/* call gate */
-#define SEGIG	(0x0E << 8)		/* interrupt gate */
-#define SEGTG	(0x0F << 8)		/* trap gate */
+#define	SEGCG	(0x0c << 8)		/* call gate */
+#define SEGIG	(0x0e << 8)		/* interrupt gate */
+#define SEGTG	(0x0f << 8)		/* trap gate */

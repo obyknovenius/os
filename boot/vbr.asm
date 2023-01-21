@@ -1,4 +1,4 @@
-org 0x7C00
+org 0x7c00
 bits 16
 
 %define LOADSEG		(0x10000/16)	; where to load code (64KB)
@@ -9,10 +9,10 @@ bits 16
 ; FAT directory entry
 %define DNAME		0x00
 %define DEXT		0x08
-%define DATTR		0x0B
-%define DSTART		0x1A
-%define DLENLO		0x1C
-%define DLENHI		0x1E
+%define DATTR		0x0b
+%define DSTART		0x1a
+%define DLENLO		0x1c
+%define DLENHI		0x1e
 
 %define DIRSZ		0x20
 
@@ -22,7 +22,7 @@ bits 16
 
 ; BIOS Parameter Block
 magic:					; jmp short start, nop
-	db 0xEB, 0x3C
+	db 0xeb, 0x3c
 	db 0x90
 version:				; mkdosfs
 	times 8 db 0
@@ -219,7 +219,7 @@ readsect:
 	div bx				; AX = head, DX = sector
 
 	inc dx				; sector numbers are 1-based
-	and dx, 0x003F
+	and dx, 0x003f
 	or cx, dx			; CL = sector number (bits 0-5)
 
 	mov dx, ax
@@ -247,7 +247,7 @@ puts:
 	or al, al
 	jz .ret
 
-	mov ah, 0x0E
+	mov ah, 0x0e
 	int 0x10
 	jmp .loop
 
@@ -266,13 +266,13 @@ pioerror:
 	hlt
 
 confidence:
-	db "MBR...", 0x0D, 0x0A, 0
+	db "MBR...", 0x0d, 0x0a, 0
 error:
-	db "Error", 0x0D, 0x0A, 0
+	db "Error", 0x0d, 0x0a, 0
 ioerror:
-	db "I/O error", 0x0D, 0x0A, 0
+	db "I/O error", 0x0d, 0x0a, 0
 bootfile:
 	db "KERNEL     "
 
 	times 510-($-$$) db 0
-	dw 0xAA55
+	dw 0xaa55

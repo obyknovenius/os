@@ -6,8 +6,8 @@
 enum {
 	Pic0Cmd		= 0x20,		/* command port (ICW1, OCW2, OCW3) */
 	Pic0Data	= 0x21,		/* data port (ICW2, ICW3, ICW4, ICW1) */
-	Pic1Cmd		= 0xA0,		/* command port */
-	Pic1Data	= 0xA1,		/* data port */
+	Pic1Cmd		= 0xa0,		/* command port */
+	Pic1Data	= 0xa1,		/* data port */
 
 	Icw1Icw4	= (1 << 0),
 	Icw1Init	= (1 << 4),
@@ -17,7 +17,7 @@ enum {
 	Ocw2Eoi		= (1 << 5),	/* end of interrupt */
 };
 
-static int irqmask = 0xFFFF;		/* disabled interrupts */
+static int irqmask = 0xffff;		/* disabled interrupts */
 
 void
 i8259init() {
@@ -63,8 +63,8 @@ i8259init() {
 	irqmask &= ~(1 << 1);
 	
 	/* OCW1 - set the mask bits */
-	outb(Pic0Data, irqmask & 0xFF);
-	outb(Pic1Data, (irqmask >> 8) & 0xFF);
+	outb(Pic0Data, irqmask & 0xff);
+	outb(Pic1Data, (irqmask >> 8) & 0xff);
 }
 
 void

@@ -1,6 +1,6 @@
+AS=i686-elf-gcc
 CC=i686-elf-gcc
 LD=i686-elf-ld
-AS=nasm
 
 OBJ=\
 	l16r.o\
@@ -25,15 +25,6 @@ all: $(TARG)
 
 kernel: kernel.ld $(OBJ)
 	$(LD) -T kernel.ld $(OBJ) $(LIBCC) -o kernel
-
-%.o: %.asm
-	$(AS) -f elf $<
-
-%.o: %.S
-	i686-elf-gcc -c $< -o $@
-
-%.o: %.c
-	$(CC) -c $< -o $@
 
 clean:
 	rm -f $(OBJ) kernel
