@@ -57,9 +57,11 @@ e820loop:
 	int	$0x15			/* writes 20 bytes at ES:DI */
 
 	jc	e820end			/* some kind of error */
+
 	movl	$0x534d4150, %edx
 	cmpl	%edx, %eax		/* verify correct BIOS version */
 	jne	e820end
+
 	movl	$20, %edx
 	cmpl	%edx, %ecx		/* verify corrct count */
 	jne	e820end
@@ -87,7 +89,7 @@ real:
 	lgdtl	(%eax)			/* load a basic gdt */
 
 	movl	%cr0, %eax
-	orl	$1, %eax
+	orl	$CR0PE, %eax
 	movl	%eax, %cr0		/* turn on protected mode */
 
 	jmpl	$KCSEL, $start32p
@@ -96,9 +98,14 @@ hello:
 	.asciz	"Welcome to Utopia\r\n"
 
 gdt:
-	.long	0x0000, 0
-	.long	0xffff, (SEGG|SEGD|(0x0f<<16)|SEGP|SEGPL(0)|SEGCODE|SEGR)
-	.long	0xffff, (SEGG|SEGB|(0x0f<<16)|SEGP|SEGPL(0)|SEGDATA|SEGW)
+	.long	0
+	.long	0
+
+	.long	0xffff
+	.long	(SEGG | SEGD | (0x0f << 16) | SEGP | SEGPL(0) | SEGCODE | SEGR)
+
+	.long	0xffff
+	.long	(SEGG | SEGB | (0x0f << 16) | SEGP | SEGPL(0) | SEGDATA | SEGW)
 
 gdtdesc:
 	.word	gdtdesc - gdt

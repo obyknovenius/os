@@ -1,6 +1,7 @@
-AS=i686-elf-gcc
 CC=i686-elf-gcc
 LD=i686-elf-ld
+
+ASFLAGS=-Wa,--divide
 
 OBJ=\
 	l16r.o\

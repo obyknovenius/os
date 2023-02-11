@@ -8,4 +8,6 @@ SECTIONS
 	{
 		*(.text)
 	}
+
+	end = .;
 }
