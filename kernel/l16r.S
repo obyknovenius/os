@@ -83,16 +83,15 @@ e820end:
  * Load a basic GDT to map 4GB, turn on the protected mode bit in CR0,
  * set all the segments to point to the new GDT then jump to the 32-bit code.
  */
-real:
-	movl	$gdtdesc, %eax
-	andl	$0xffff, %eax
-	lgdtl	(%eax)			/* load a basic gdt */
+real:	
+	movl	$(gdtdesc - KZERO - PBSBASE), %eax
+	lgdtw	(%eax)		/* load a basic gdt */
 
 	movl	%cr0, %eax
 	orl	$CR0PE, %eax
 	movl	%eax, %cr0		/* turn on protected mode */
 
-	jmpl	$KCSEL, $start32p
+	jmpl	$KCSEL, $(start32p - KZERO)
 
 hello:
 	.asciz	"Welcome to Utopia\r\n"
@@ -108,5 +107,5 @@ gdt:
 	.long	(SEGG | SEGB | (0x0f << 16) | SEGP | SEGPL(0) | SEGDATA | SEGW)
 
 gdtdesc:
-	.word	gdtdesc - gdt
-	.long	gdt
+	.word	3 * 8
+	.long	(gdt - KZERO)

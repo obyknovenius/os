@@ -15,7 +15,7 @@ start32p:
 	movw	%ax, %ss
 
 start32pg:
-	movl	$end - KZERO, %edx	/* clear pages for the tables etc. */
+	movl	$(end - KZERO), %edx	/* clear pages for the tables etc. */
 	addl	$(BY2PG - 1), %edx	/* start must be page aligned */
 	andl	$~(BY2PG - 1), %edx
 

@@ -11,9 +11,10 @@
 /*
  * Fundamental addresses
  */
-#define KZERO		0x10000		/* base of kernel address space */
+#define KZERO		0x80000000	/* base of kernel address space */
 #define IDTADDR		(KZERO + 0x3000)/* idt */
 #define PXEBASE		0x7c00		/* pxe loads us here */
+#define PBSBASE		0x10000		/* pbs loads us here */
 
 #define MMAP		(512 * 1024)
 

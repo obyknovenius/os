@@ -16,6 +16,7 @@ main() {
 	readmmap();
 
 	trapinit();
+
 	kbdinit();
 	i8259init();
 
