@@ -1,5 +1,4 @@
-#include "t.h"
-#include "stdarg.h"
+#include <t.h>
 #include "cga.h"
 
 enum {

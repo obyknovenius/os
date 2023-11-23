@@ -1,9 +1,12 @@
 IMG=floppy.img
 
-all: boot kernel
+all: boot libc kernel
 
 boot:
 	make -C boot
+
+libc:
+	make -C libc
 
 kernel:
 	make -C kernel
@@ -19,7 +22,8 @@ run: image
 
 clean:
 	make -C kernel clean
+	make -C libc clean
 	make -C boot clean
-	rm -f floppy.img
+	rm -f $(IMG)
 
-.PHONY: all boot kernel image run clean
+.PHONY: all boot libc kernel image run clean

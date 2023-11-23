@@ -1,5 +1,4 @@
-CC=i686-elf-gcc
-LD=i686-elf-ld
+include $(ROOT)/$(ARCH)/makefile
 
 ASFLAGS=-Wa,--divide
 
@@ -25,7 +24,7 @@ TARG=\
 all: $(TARG)
 
 kernel: kernel.ld $(OBJ)
-	$(LD) -T kernel.ld $(OBJ) $(LIBCC) -o kernel
+	$(LD) $(LDFLAGS) -T kernel.ld $(OBJ) $(LIBCC) -lc -o kernel
 
 clean:
 	rm -f $(OBJ) kernel
